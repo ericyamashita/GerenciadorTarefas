@@ -9,10 +9,10 @@ def exibir_menu():
     print("4. Sair")
 
 def ver_tarefas():
-    if not os.path.exists('Algoritmos/tarefas.csv'):
+    if not os.path.exists('GerenciadorTarefas/tarefas.csv'):
         print('Ainda nao há tarefas adicionadas.')
         return
-    with open('Algoritmos/tarefas.csv','r') as arquivo:
+    with open('GerenciadorTarefas/tarefas.csv','r') as arquivo:
         leitor = csv.reader(arquivo)
         for linha in leitor:
             print (f"[{linha[0]}] {linha[1]}")
@@ -21,7 +21,7 @@ def adicionar_tarefa():
     descricao = input("Digite a descrição da tarefa: ")
     tarefa = [get_proximo_id(), descricao]
 
-    with open('Algoritmos/tarefas.csv', 'a', newline='') as arquivo:
+    with open('GerenciadorTarefas/tarefas.csv', 'a', newline='') as arquivo:
         escritor = csv.writer(arquivo)
         escritor.writerow(tarefa)
 
@@ -31,13 +31,13 @@ def marcar_tarefa_concluida():
     id_tarefa = input("Digite o ID da tarefa concluída: ")
 
     tarefas = []
-    with open('Algoritmos/tarefas.csv', 'r') as arquivo:
+    with open('GerenciadorTarefas/tarefas.csv', 'r') as arquivo:
         leitor = csv.reader(arquivo)
         for linha in leitor:
             tarefas.append(linha)
 
     encontrada = False
-    with open('Algoritmos/tarefas.csv', 'w', newline='') as arquivo:
+    with open('GerenciadorTarefas/tarefas.csv', 'w', newline='') as arquivo:
         escritor = csv.writer(arquivo)
         for tarefa in tarefas:
             if tarefa[0] == id_tarefa:
@@ -51,9 +51,9 @@ def marcar_tarefa_concluida():
         print("Nenhuma tarefa encontrada com o ID fornecido.")
 
 def get_proximo_id():
-    if not os.path.exists('Algoritmos/tarefas.csv'):
+    if not os.path.exists('GerenciadorTarefas/tarefas.csv'):
         return 1
-    with open('Algoritmos/tarefas.csv', 'r') as arquivo:
+    with open('GerenciadorTarefas/tarefas.csv', 'r') as arquivo:
         leitor = csv.reader(arquivo)
         linhas = list(leitor)
         if len(linhas) == 0:
