@@ -1,18 +1,22 @@
 import csv
 import os
 
+#local armazenamento do arquivo
+arquivo_csv ='GerenciadorTarefas/tarefas.csv'
+
 def exibir_menu():
     print("------ GERENCIADOR DE TAREFAS ------")
     print("1. Ver tarefas")
     print("2. Adicionar tarefa")
     print("3. Marcar tarefa como concluída")
-    print("4. Sair")
+    print("4. Ver tarefas em Realizadas! ")
+    print("5. Sair")
 
 def ver_tarefas():
-    if not os.path.exists('GerenciadorTarefas/tarefas.csv'):
+    if not os.path.exists(arquivo_csv):
         print('Ainda nao há tarefas adicionadas.')
         return
-    with open('GerenciadorTarefas/tarefas.csv','r') as arquivo:
+    with open(arquivo_csv,'r') as arquivo:
         leitor = csv.reader(arquivo)
         for linha in leitor:
             print (f"[{linha[0]}] {linha[1]}")
@@ -21,7 +25,7 @@ def adicionar_tarefa():
     descricao = input("Digite a descrição da tarefa: ")
     tarefa = [get_proximo_id(), descricao]
 
-    with open('GerenciadorTarefas/tarefas.csv', 'a', newline='') as arquivo:
+    with open(arquivo_csv, 'a', newline='') as arquivo:
         escritor = csv.writer(arquivo)
         escritor.writerow(tarefa)
 
@@ -31,13 +35,13 @@ def marcar_tarefa_concluida():
     id_tarefa = input("Digite o ID da tarefa concluída: ")
 
     tarefas = []
-    with open('GerenciadorTarefas/tarefas.csv', 'r') as arquivo:
+    with open(arquivo_csv, 'r') as arquivo:
         leitor = csv.reader(arquivo)
         for linha in leitor:
             tarefas.append(linha)
 
     encontrada = False
-    with open('GerenciadorTarefas/tarefas.csv', 'w', newline='') as arquivo:
+    with open(arquivo_csv, 'w', newline='') as arquivo:
         escritor = csv.writer(arquivo)
         for tarefa in tarefas:
             if tarefa[0] == id_tarefa:
@@ -51,9 +55,9 @@ def marcar_tarefa_concluida():
         print("Nenhuma tarefa encontrada com o ID fornecido.")
 
 def get_proximo_id():
-    if not os.path.exists('GerenciadorTarefas/tarefas.csv'):
+    if not os.path.exists(arquivo_csv):
         return 1
-    with open('GerenciadorTarefas/tarefas.csv', 'r') as arquivo:
+    with open(arquivo_csv, 'r') as arquivo:
         leitor = csv.reader(arquivo)
         linhas = list(leitor)
         if len(linhas) == 0:
@@ -63,6 +67,27 @@ def get_proximo_id():
 
 def limpar_tela():
     os.system('cls' if os.name == 'nt' else 'clear')
+
+def ver_tarefas_concluidas():
+    if not os.path.exists(arquivo_csv):
+        print('Ainda nao há tarefas adicionadas.')
+        return
+    with open(arquivo_csv,'r') as arquivo:
+        leitor = csv.reader(arquivo)
+        for linha in leitor:
+            if(len(linha)==2):
+                print (f"[{linha[0]}] {linha[1]}")
+                #print("")
+            else:
+                print (f"[{linha[0]}] {linha[1]} - {linha[2]}")
+
+def contar_colunas():
+    with open(arquivo_csv, 'r') as arquivo:
+        leitor_csv = csv.reader(arquivo)
+        primeira_linha = next(leitor_csv)  # Lê a primeira linha do arquivo CSV
+        num_colunas = len(primeira_linha)
+        return num_colunas
+
 
 def main():
     while True:
@@ -76,8 +101,10 @@ def main():
             limpar_tela()  
         elif opcao == "3":
             marcar_tarefa_concluida()
-            limpar_tela() 
+            #limpar_tela() 
         elif opcao == "4":
+            ver_tarefas_concluidas()          
+        elif opcao == "5":
             break
         else:
             print("Opção inválida. Tente Novamente.")
