@@ -1,6 +1,7 @@
 import csv
 import os
 import time
+import datetime
 
 #local armazenamento do arquivo
 arquivo_csv ='GerenciadorTarefas/tarefas.csv'
@@ -41,7 +42,8 @@ def adicionar_tarefa():
     
 def marcar_tarefa_concluida():
     id_tarefa = input("Digite o ID da tarefa concluída: ")
-
+    data_var = datetime.datetime.now()
+    data_string = data_var.strftime('%d/%m/%Y %H:%M:%S')
     tarefas = []
     with open(arquivo_csv, 'r') as arquivo:
         leitor = csv.reader(arquivo)
@@ -55,6 +57,7 @@ def marcar_tarefa_concluida():
             if tarefa[0] == id_tarefa:
                 encontrada = True
                 tarefa.append("Concluida")
+                tarefa.append(data_string)
             escritor.writerow(tarefa)
 
     if encontrada:
