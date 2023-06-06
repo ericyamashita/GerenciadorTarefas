@@ -11,7 +11,8 @@ def exibir_menu():
     print("2. Adicionar tarefa")
     print("3. Marcar tarefa como concluída")
     print("4. Ver tarefas em Realizadas! ")
-    print("5. Sair")
+    print("5. Remover a tarefa(s) ")
+    print("6. Sair")
 
 def ver_tarefas():
     ini_t = time.time()
@@ -48,7 +49,7 @@ def marcar_tarefa_concluida():
             tarefas.append(linha)
 
     encontrada = False
-    with open(arquivo_csv, 'w', newline='') as arquivo:
+    with open(arquivo_csv, 'w', newline='', encoding='utf-8') as arquivo:
         escritor = csv.writer(arquivo)
         for tarefa in tarefas:
             if tarefa[0] == id_tarefa:
@@ -77,7 +78,7 @@ def limpar_tela():
 
 def ver_tarefas_concluidas():
     if not os.path.exists(arquivo_csv):
-        print('Ainda nao há tarefas adicionadas.')
+        print('Nao há tarefas adicionadas.')
         return
     with open(arquivo_csv,'r') as arquivo:
         leitor = csv.reader(arquivo)
@@ -95,6 +96,28 @@ def contar_colunas():
         num_colunas = len(primeira_linha)
         return num_colunas
 
+def remover_tarefa():
+    id_tarefa = input("Digite o ID da tarefa a Remover: ")
+
+    tarefas = []
+    with open(arquivo_csv, 'r') as arquivo:
+        leitor = csv.reader(arquivo)
+        for linha in leitor:
+            tarefas.append(linha)
+
+    encontrada = False
+    with open(arquivo_csv, 'w',newline='') as arquivo:
+        escritor = csv.writer(arquivo)
+        for tarefa in tarefas:
+            if tarefa[0] == id_tarefa:
+                encontrada = True
+                tarefa.append("Removido")
+            escritor.writerow(tarefa)
+
+    if encontrada:
+        print("Tarefa Removida!")
+    else:
+        print("Nenhuma tarefa encontrada com o ID fornecido.")
 
 def main():
     while True:
@@ -110,8 +133,10 @@ def main():
             marcar_tarefa_concluida()
             #limpar_tela() 
         elif opcao == "4":
-            ver_tarefas_concluidas()          
+            ver_tarefas_concluidas()  
         elif opcao == "5":
+            remover_tarefa()            
+        elif opcao == "6":
             break
         else:
             print("Opção inválida. Tente Novamente.")
