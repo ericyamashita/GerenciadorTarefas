@@ -1,5 +1,6 @@
 import csv
 import os
+import time
 
 #local armazenamento do arquivo
 arquivo_csv ='GerenciadorTarefas/tarefas.csv'
@@ -13,6 +14,7 @@ def exibir_menu():
     print("5. Sair")
 
 def ver_tarefas():
+    ini_t = time.time()
     if not os.path.exists(arquivo_csv):
         print('Ainda nao há tarefas adicionadas.')
         return
@@ -20,6 +22,11 @@ def ver_tarefas():
         leitor = csv.reader(arquivo)
         for linha in leitor:
             print (f"[{linha[0]}] {linha[1]}")
+
+    fin_t = time.time()
+    
+    print("Execução de Tempo:" + str(fin_t - ini_t) + " segundos")
+    print("")
 
 def adicionar_tarefa():
     descricao = input("Digite a descrição da tarefa: ")
